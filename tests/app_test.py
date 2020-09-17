@@ -1,41 +1,27 @@
 import pytest
 import json
 
-import main
-
-# Fixtures are functions, which will run before each test function to which it is applied.
-# Fixtures are used to feed some data to the tests such as database connections
-
-
-@pytest.fixture
-def app():
-    """Creating an Flask app, returning its client"""
-
-    app = main.create_app()
-    app.debug = True
-    return app.test_client()
 
 # Testing route '/'
-
-
-def test_hello(app):
+def test_hello(application):
     """Testing main route"""
 
     # Referencing app
-    result = app.get("/")
+    result = application.get("/")
 
     # Debugging
     print(result.data, result.status_code)
+    print(type(application))
 
     # Tests
     assert result.status_code == 200
     assert b"Hello, I am a simple flask app!" in result.data
 
 
-def test_register(app):
+def test_register(application):
     """Testing registering of an app"""
 
-    result = app.post("/register",
+    result = application.post("/register",
                     data=json.dumps({'login': 'mati', 'password': 'password'}),
                     content_type='application/json',)
 

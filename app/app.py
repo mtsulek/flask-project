@@ -1,12 +1,18 @@
+"""This module contains flask app and its routes"""
+
 from flask import Flask, request
+from app.settings import DevConfiguration, ProdConfiguration
 
 
-def create_app():
+def create_app(configuration_py_file) -> Flask:
+    """This function is initiating flask application. Consists route paths"""
 
     app = Flask(__name__)
+    app.config.from_object(configuration_py_file)
 
     @app.route('/')
     def hello() -> str:
+        """Hello world method"""
         return 'Hello, I am a simple flask app!'
 
     @app.route('/register', methods=['POST'])
@@ -20,11 +26,3 @@ def create_app():
         return {"login": login, "password": password}
 
     return app
-
-
-if __name__ == "__main__":
-    port = 8000
-    app = create_app()
-    app.run(host="0.0.0.0", port=port)
-
-# curl -H "Content-Type: application/json" -X POST -d '{"login":"mateusz"}' http://127.0.0.1:5000/register
